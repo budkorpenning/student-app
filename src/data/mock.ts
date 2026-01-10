@@ -60,6 +60,26 @@ export const todayLessons: Lesson[] = [
     teacher: 'Lisa Andersson',
     status: 'cancelled',
   },
+  {
+    id: '6',
+    start: getDateString(0, 15, 45),
+    end: getDateString(0, 16, 30),
+    title: 'Biologi',
+    course: 'BI1',
+    location: 'Labbsal 2',
+    teacher: 'Karin Holm',
+    status: 'normal',
+  },
+  {
+    id: '7',
+    start: getDateString(0, 16, 45),
+    end: getDateString(0, 17, 30),
+    title: 'Samhällskunskap',
+    course: 'SH1b',
+    location: 'Sal 310',
+    teacher: 'Anders Berg',
+    status: 'normal',
+  },
 ];
 
 // Mock lessons for the week (Mon-Fri)
