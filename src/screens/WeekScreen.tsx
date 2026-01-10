@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, FlatList, StyleSheet, ScrollView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Screen } from '../components/Screen';
 import { Chip } from '../components/Chip';
 import { ListRow } from '../components/ListRow';
@@ -17,6 +18,7 @@ const DAY_KEYS: StringKey[] = ['mon', 'tue', 'wed', 'thu', 'fri'];
 export function WeekScreen() {
   const { colors, spacing, typography } = useTheme();
   const { t } = useI18n();
+  const insets = useSafeAreaInsets();
 
   const today = getDayOfWeek(new Date());
   const initialDay = today >= 1 && today <= 5 ? today : 1;
@@ -26,7 +28,7 @@ export function WeekScreen() {
     return weekLessons[selectedDay] || [];
   }, [selectedDay]);
 
-  const getLessonStatusBadge = (lesson: Lesson) => {
+  const getLessonStatusBadge = useCallback((lesson: Lesson) => {
     if (lesson.status === 'changed') {
       return <Badge label={t('lessonChanged')} variant="warning" />;
     }
@@ -34,9 +36,9 @@ export function WeekScreen() {
       return <Badge label={t('lessonCancelled')} variant="danger" />;
     }
     return null;
-  };
+  }, [t]);
 
-  const renderLesson = ({ item }: { item: Lesson }) => (
+  const renderLesson = useCallback(({ item }: { item: Lesson }) => (
     <View style={{ marginBottom: spacing.sm }}>
       <ListRow
         title={item.title}
@@ -44,10 +46,10 @@ export function WeekScreen() {
         trailing={getLessonStatusBadge(item)}
       />
     </View>
-  );
+  ), [spacing.sm, getLessonStatusBadge]);
 
-  return (
-    <Screen>
+  const ListHeader = useMemo(() => (
+    <View style={{ paddingTop: spacing.lg }}>
       <Text style={[typography.title, { color: colors.text, marginBottom: spacing.xl }]}>
         {t('weekTitle')}
       </Text>
@@ -56,7 +58,7 @@ export function WeekScreen() {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={{ marginBottom: spacing.lg, flexGrow: 0 }}
+        style={{ marginBottom: spacing.lg }}
         contentContainerStyle={styles.chipContainer}
       >
         {DAY_KEYS.map((key, index) => {
@@ -72,18 +74,27 @@ export function WeekScreen() {
           );
         })}
       </ScrollView>
+    </View>
+  ), [colors, spacing, typography, t, selectedDay]);
 
-      {/* Lessons list */}
-      {lessons.length > 0 ? (
-        <FlatList
-          data={lessons}
-          renderItem={renderLesson}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
-        />
-      ) : (
-        <EmptyState message={t('noLessonsThisDay')} />
-      )}
+  const ListEmpty = useMemo(() => (
+    <EmptyState message={t('noLessonsThisDay')} />
+  ), [t]);
+
+  return (
+    <Screen>
+      <FlatList
+        data={lessons}
+        renderItem={renderLesson}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={ListHeader}
+        ListEmptyComponent={ListEmpty}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingBottom: insets.bottom + spacing.xl,
+        }}
+      />
     </Screen>
   );
 }

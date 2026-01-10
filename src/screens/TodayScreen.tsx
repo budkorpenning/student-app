@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Screen } from '../components/Screen';
 import { Card } from '../components/Card';
 import { SectionHeader } from '../components/SectionHeader';
@@ -10,11 +11,12 @@ import { useTheme } from '../theme/theme';
 import { useI18n } from '../i18n/i18n';
 import { todayLessons, assignments } from '../data/mock';
 import { Lesson, Assignment } from '../data/types';
-import { formatTimeRange, formatRelativeDate, isPast } from '../utils/date';
+import { formatTimeRange, formatRelativeDate } from '../utils/date';
 
 export function TodayScreen() {
   const { colors, spacing, typography } = useTheme();
   const { t, language } = useI18n();
+  const insets = useSafeAreaInsets();
 
   const now = new Date();
 
@@ -36,7 +38,7 @@ export function TodayScreen() {
       .slice(0, 3);
   }, []);
 
-  const getLessonStatusBadge = (lesson: Lesson) => {
+  const getLessonStatusBadge = useCallback((lesson: Lesson) => {
     if (lesson.status === 'changed') {
       return <Badge label={t('lessonChanged')} variant="warning" />;
     }
@@ -44,16 +46,16 @@ export function TodayScreen() {
       return <Badge label={t('lessonCancelled')} variant="danger" />;
     }
     return null;
-  };
+  }, [t]);
 
-  const getAssignmentBadge = (assignment: Assignment) => {
+  const getAssignmentBadge = useCallback((assignment: Assignment) => {
     if (assignment.status === 'overdue') {
       return <Badge label={t('statusOverdue')} variant="danger" />;
     }
     return null;
-  };
+  }, [t]);
 
-  const renderLaterLesson = ({ item }: { item: Lesson }) => (
+  const renderLaterLesson = useCallback(({ item }: { item: Lesson }) => (
     <View style={{ marginBottom: spacing.sm }}>
       <ListRow
         title={item.title}
@@ -61,20 +63,11 @@ export function TodayScreen() {
         trailing={getLessonStatusBadge(item)}
       />
     </View>
-  );
+  ), [spacing.sm, getLessonStatusBadge]);
 
-  const renderAssignment = ({ item }: { item: Assignment }) => (
-    <View style={{ marginBottom: spacing.sm }}>
-      <ListRow
-        title={item.title}
-        subtitle={`${item.course || ''} · ${t('duePrefix')} ${formatRelativeDate(item.dueAt, language)}`}
-        trailing={getAssignmentBadge(item)}
-      />
-    </View>
-  );
-
-  return (
-    <Screen scroll>
+  const ListHeader = useMemo(() => (
+    <View style={{ paddingTop: spacing.lg }}>
+      {/* Screen title */}
       <Text style={[typography.title, { color: colors.text, marginBottom: spacing.xl }]}>
         {t('todayTitle')}
       </Text>
@@ -107,34 +100,50 @@ export function TodayScreen() {
         </Card>
       )}
 
-      {/* Later today */}
+      {/* Later today section header */}
       <SectionHeader title={t('laterToday')} />
-      {laterLessons.length > 0 ? (
-        <FlatList
-          data={laterLessons}
-          renderItem={renderLaterLesson}
-          keyExtractor={(item) => item.id}
-          scrollEnabled={false}
-          style={{ marginBottom: spacing.lg }}
-        />
-      ) : (
+      {laterLessons.length === 0 && (
         <View style={{ marginBottom: spacing.xl }}>
           <EmptyState message={t('noLessonsToday')} />
         </View>
       )}
+    </View>
+  ), [colors, spacing, typography, t, nextLesson, laterLessons.length]);
 
-      {/* Due soon */}
+  const ListFooter = useMemo(() => (
+    <View style={{ paddingBottom: insets.bottom + spacing.xl }}>
+      {/* Spacer if there were lessons */}
+      {laterLessons.length > 0 && <View style={{ height: spacing.lg }} />}
+
+      {/* Due soon section */}
       <SectionHeader title={t('dueSoon')} />
       {dueSoonAssignments.length > 0 ? (
-        <FlatList
-          data={dueSoonAssignments}
-          renderItem={renderAssignment}
-          keyExtractor={(item) => item.id}
-          scrollEnabled={false}
-        />
+        dueSoonAssignments.map((assignment) => (
+          <View key={assignment.id} style={{ marginBottom: spacing.sm }}>
+            <ListRow
+              title={assignment.title}
+              subtitle={`${assignment.course || ''} · ${t('duePrefix')} ${formatRelativeDate(assignment.dueAt, language)}`}
+              trailing={getAssignmentBadge(assignment)}
+            />
+          </View>
+        ))
       ) : (
         <EmptyState message={t('noUpcomingAssignments')} />
       )}
+    </View>
+  ), [spacing, insets.bottom, t, language, dueSoonAssignments, laterLessons.length, getAssignmentBadge]);
+
+  return (
+    <Screen>
+      <FlatList
+        data={laterLessons}
+        renderItem={renderLaterLesson}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={ListHeader}
+        ListFooterComponent={ListFooter}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1 }}
+      />
     </Screen>
   );
 }

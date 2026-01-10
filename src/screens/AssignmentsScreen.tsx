@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, FlatList, StyleSheet, ScrollView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Screen } from '../components/Screen';
 import { Chip } from '../components/Chip';
 import { ListRow } from '../components/ListRow';
@@ -29,6 +30,7 @@ const FILTERS: FilterOption[] = [
 export function AssignmentsScreen() {
   const { colors, spacing, typography } = useTheme();
   const { t, language } = useI18n();
+  const insets = useSafeAreaInsets();
 
   const [filter, setFilter] = useState<FilterType>('all');
 
@@ -44,7 +46,7 @@ export function AssignmentsScreen() {
     return sorted.filter((a) => a.status === filter);
   }, [filter]);
 
-  const getStatusBadge = (assignment: Assignment) => {
+  const getStatusBadge = useCallback((assignment: Assignment) => {
     switch (assignment.status) {
       case 'overdue':
         return <Badge label={t('statusOverdue')} variant="danger" />;
@@ -55,9 +57,9 @@ export function AssignmentsScreen() {
       default:
         return null;
     }
-  };
+  }, [t]);
 
-  const renderAssignment = ({ item }: { item: Assignment }) => (
+  const renderAssignment = useCallback(({ item }: { item: Assignment }) => (
     <View style={{ marginBottom: spacing.sm }}>
       <ListRow
         title={item.title}
@@ -65,10 +67,10 @@ export function AssignmentsScreen() {
         trailing={getStatusBadge(item)}
       />
     </View>
-  );
+  ), [spacing.sm, t, language, getStatusBadge]);
 
-  return (
-    <Screen>
+  const ListHeader = useMemo(() => (
+    <View style={{ paddingTop: spacing.lg }}>
       <Text style={[typography.title, { color: colors.text, marginBottom: spacing.xl }]}>
         {t('assignmentsTitle')}
       </Text>
@@ -77,7 +79,7 @@ export function AssignmentsScreen() {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={{ marginBottom: spacing.lg, flexGrow: 0 }}
+        style={{ marginBottom: spacing.lg }}
         contentContainerStyle={styles.chipContainer}
       >
         {FILTERS.map((filterOption) => (
@@ -90,18 +92,27 @@ export function AssignmentsScreen() {
           </View>
         ))}
       </ScrollView>
+    </View>
+  ), [colors, spacing, typography, t, filter]);
 
-      {/* Assignments list */}
-      {filteredAssignments.length > 0 ? (
-        <FlatList
-          data={filteredAssignments}
-          renderItem={renderAssignment}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
-        />
-      ) : (
-        <EmptyState message={t('noAssignments')} />
-      )}
+  const ListEmpty = useMemo(() => (
+    <EmptyState message={t('noAssignments')} />
+  ), [t]);
+
+  return (
+    <Screen>
+      <FlatList
+        data={filteredAssignments}
+        renderItem={renderAssignment}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={ListHeader}
+        ListEmptyComponent={ListEmpty}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingBottom: insets.bottom + spacing.xl,
+        }}
+      />
     </Screen>
   );
 }

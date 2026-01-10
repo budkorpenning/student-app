@@ -13,37 +13,50 @@ interface ListRowProps {
 export function ListRow({ title, subtitle, trailing, onPress, style }: ListRowProps) {
   const { colors, spacing, typography } = useTheme();
 
+  const containerStyle = [
+    styles.container,
+    {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+      padding: spacing.lg,
+    },
+    style,
+  ];
+
   const content = (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: colors.surface,
-          borderColor: colors.border,
-          padding: spacing.lg,
-        },
-        style,
-      ]}
-    >
+    <>
       <View style={styles.content}>
-        <Text style={[typography.body, { color: colors.text }]} numberOfLines={1}>
+        <Text style={[typography.bodyBold, { color: colors.text }]} numberOfLines={2}>
           {title}
         </Text>
         {subtitle && (
-          <Text style={[typography.caption, { color: colors.textMuted, marginTop: spacing.xs }]}>
+          <Text
+            style={[typography.caption, { color: colors.textMuted, marginTop: spacing.xs }]}
+            numberOfLines={2}
+          >
             {subtitle}
           </Text>
         )}
       </View>
-      {trailing && <View style={styles.trailing}>{trailing}</View>}
-    </View>
+      {trailing && <View style={[styles.trailing, { marginLeft: spacing.md }]}>{trailing}</View>}
+    </>
   );
 
   if (onPress) {
-    return <Pressable onPress={onPress}>{content}</Pressable>;
+    return (
+      <Pressable
+        onPress={onPress}
+        style={({ pressed }) => [
+          containerStyle,
+          pressed && { opacity: 0.7 },
+        ]}
+      >
+        {content}
+      </Pressable>
+    );
   }
 
-  return content;
+  return <View style={containerStyle}>{content}</View>;
 }
 
 const styles = StyleSheet.create({
@@ -57,6 +70,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   trailing: {
-    marginLeft: 12,
+    flexShrink: 0,
   },
 });
