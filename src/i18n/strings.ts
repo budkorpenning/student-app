@@ -53,6 +53,10 @@ export const strings = {
     language: 'Språk',
     languageSwedish: 'Svenska',
     languageEnglish: 'English',
+    theme: 'Utseende',
+    themeSystem: 'System',
+    themeLight: 'Ljust',
+    themeDark: 'Mörkt',
     about: 'Om appen',
     version: 'Version',
 
@@ -114,6 +118,10 @@ export const strings = {
     language: 'Language',
     languageSwedish: 'Svenska',
     languageEnglish: 'English',
+    theme: 'Theme',
+    themeSystem: 'System',
+    themeLight: 'Light',
+    themeDark: 'Dark',
     about: 'About',
     version: 'Version',
 

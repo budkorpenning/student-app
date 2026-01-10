@@ -39,6 +39,11 @@ export const lightColors = {
   warning: palette.amber500,
   success: palette.green500,
 
+  // Text on primary/hero backgrounds
+  textOnPrimary: palette.white,
+  textOnPrimaryMuted: 'rgba(255, 255, 255, 0.9)',
+  textOnPrimaryDim: 'rgba(255, 255, 255, 0.7)',
+
   tabBarBg: palette.white,
   tabBarBorder: palette.gray200,
   tabBarActive: palette.blue600,
@@ -58,6 +63,11 @@ export const darkColors = {
   warning: palette.amber500,
   success: palette.green500,
 
+  // Text on primary/hero backgrounds
+  textOnPrimary: palette.white,
+  textOnPrimaryMuted: 'rgba(255, 255, 255, 0.9)',
+  textOnPrimaryDim: 'rgba(255, 255, 255, 0.7)',
+
   tabBarBg: palette.gray800,
   tabBarBorder: palette.gray700,
   tabBarActive: palette.blue500,
@@ -75,6 +85,9 @@ export interface Colors {
   danger: string;
   warning: string;
   success: string;
+  textOnPrimary: string;
+  textOnPrimaryMuted: string;
+  textOnPrimaryDim: string;
   tabBarBg: string;
   tabBarBorder: string;
   tabBarActive: string;

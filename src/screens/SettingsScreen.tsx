@@ -3,18 +3,17 @@ import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Screen } from '../components/Screen';
 import { SectionHeader } from '../components/SectionHeader';
-import { useTheme } from '../theme/theme';
+import { useTheme, useThemeMode, ThemeMode } from '../theme/theme';
 import { useI18n } from '../i18n/i18n';
 import { Language } from '../i18n/strings';
 
-interface LanguageOptionProps {
+interface SettingsOptionProps {
   label: string;
-  value: Language;
   selected: boolean;
   onPress: () => void;
 }
 
-function LanguageOption({ label, selected, onPress }: LanguageOptionProps) {
+function SettingsOption({ label, selected, onPress }: SettingsOptionProps) {
   const { colors, spacing, typography } = useTheme();
 
   return (
@@ -34,7 +33,7 @@ function LanguageOption({ label, selected, onPress }: LanguageOptionProps) {
       <Text style={[typography.body, { color: colors.text }]}>{label}</Text>
       {selected && (
         <View style={[styles.checkmark, { backgroundColor: colors.primary }]}>
-          <Text style={styles.checkmarkText}>✓</Text>
+          <Text style={[styles.checkmarkText, { color: colors.textOnPrimary }]}>✓</Text>
         </View>
       )}
     </Pressable>
@@ -61,10 +60,32 @@ function SettingsRow({ label, value }: { label: string; value: string }) {
   );
 }
 
+interface LanguageOptionData {
+  label: string;
+  value: Language;
+}
+
+interface ThemeOptionData {
+  label: string;
+  value: ThemeMode;
+}
+
 export function SettingsScreen() {
   const { colors, spacing, typography } = useTheme();
+  const { mode, setMode } = useThemeMode();
   const { t, language, setLanguage } = useI18n();
   const insets = useSafeAreaInsets();
+
+  const languageOptions: LanguageOptionData[] = [
+    { label: t('languageSwedish'), value: 'sv' },
+    { label: t('languageEnglish'), value: 'en' },
+  ];
+
+  const themeOptions: ThemeOptionData[] = [
+    { label: t('themeSystem'), value: 'system' },
+    { label: t('themeLight'), value: 'light' },
+    { label: t('themeDark'), value: 'dark' },
+  ];
 
   return (
     <Screen>
@@ -79,22 +100,34 @@ export function SettingsScreen() {
           {t('settingsTitle')}
         </Text>
 
+        {/* Theme section */}
+        <SectionHeader title={t('theme')} />
+        <View style={{ marginBottom: spacing.xl }}>
+          {themeOptions.map((option, index) => (
+            <React.Fragment key={option.value}>
+              {index > 0 && <View style={{ height: spacing.sm }} />}
+              <SettingsOption
+                label={option.label}
+                selected={mode === option.value}
+                onPress={() => setMode(option.value)}
+              />
+            </React.Fragment>
+          ))}
+        </View>
+
         {/* Language section */}
         <SectionHeader title={t('language')} />
         <View style={{ marginBottom: spacing.xl }}>
-          <LanguageOption
-            label={t('languageSwedish')}
-            value="sv"
-            selected={language === 'sv'}
-            onPress={() => setLanguage('sv')}
-          />
-          <View style={{ height: spacing.sm }} />
-          <LanguageOption
-            label={t('languageEnglish')}
-            value="en"
-            selected={language === 'en'}
-            onPress={() => setLanguage('en')}
-          />
+          {languageOptions.map((option, index) => (
+            <React.Fragment key={option.value}>
+              {index > 0 && <View style={{ height: spacing.sm }} />}
+              <SettingsOption
+                label={option.label}
+                selected={language === option.value}
+                onPress={() => setLanguage(option.value)}
+              />
+            </React.Fragment>
+          ))}
         </View>
 
         {/* About section */}
@@ -120,7 +153,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   checkmarkText: {
-    color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '600',
   },

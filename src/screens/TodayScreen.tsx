@@ -80,14 +80,14 @@ export function TodayScreen() {
             {nextLesson.status === 'changed' && (
               <Badge label={t('lessonChanged')} variant="warning" />
             )}
-            <Text style={[typography.title, styles.heroTitle]}>
+            <Text style={[typography.title, { color: colors.textOnPrimary, marginTop: 4 }]}>
               {nextLesson.title}
             </Text>
-            <Text style={[typography.body, styles.heroSubtitle]}>
+            <Text style={[typography.body, { color: colors.textOnPrimaryMuted }]}>
               {formatTimeRange(nextLesson.start, nextLesson.end)}
             </Text>
             {nextLesson.location && (
-              <Text style={[typography.caption, styles.heroMeta]}>
+              <Text style={[typography.caption, { color: colors.textOnPrimaryDim }]}>
                 {nextLesson.location}
                 {nextLesson.teacher && ` · ${nextLesson.teacher}`}
               </Text>
@@ -151,15 +151,5 @@ export function TodayScreen() {
 const styles = StyleSheet.create({
   heroContent: {
     gap: 4,
-  },
-  heroTitle: {
-    color: '#FFFFFF',
-    marginTop: 4,
-  },
-  heroSubtitle: {
-    color: 'rgba(255, 255, 255, 0.9)',
-  },
-  heroMeta: {
-    color: 'rgba(255, 255, 255, 0.7)',
   },
 });

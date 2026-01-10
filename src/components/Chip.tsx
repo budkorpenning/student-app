@@ -27,7 +27,7 @@ export function Chip({ label, selected = false, onPress }: ChipProps) {
       <Text
         style={[
           typography.captionBold,
-          { color: selected ? '#FFFFFF' : colors.text },
+          { color: selected ? colors.textOnPrimary : colors.text },
         ]}
       >
         {label}
