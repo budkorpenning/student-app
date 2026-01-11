@@ -45,6 +45,16 @@ export const strings = {
     statusOverdue: 'Försenad',
     statusCompleted: 'Klar',
 
+    // Assignment details
+    deadline: 'Deadline',
+    instructions: 'Instruktioner',
+    comments: 'Kommentarer',
+    noComments: 'Inga kommentarer',
+    writeCommentPlaceholder: 'Skriv en kommentar...',
+    send: 'Skicka',
+    you: 'Du',
+    teacher: 'Lärare',
+
     // Lesson status badges
     lessonChanged: 'Ändrad',
     lessonCancelled: 'Inställd',
@@ -123,6 +133,16 @@ export const strings = {
     statusOpen: 'Open',
     statusOverdue: 'Overdue',
     statusCompleted: 'Completed',
+
+    // Assignment details
+    deadline: 'Deadline',
+    instructions: 'Instructions',
+    comments: 'Comments',
+    noComments: 'No comments',
+    writeCommentPlaceholder: 'Write a comment...',
+    send: 'Send',
+    you: 'You',
+    teacher: 'Teacher',
 
     // Lesson status badges
     lessonChanged: 'Changed',

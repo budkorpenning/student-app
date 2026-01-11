@@ -1,4 +1,4 @@
-import { Lesson, Assignment, Message } from './types';
+import { Lesson, Assignment, Message, Comment } from './types';
 
 // Helper to create dates relative to today
 function getDateString(dayOffset: number, hours: number, minutes: number): string {
@@ -223,6 +223,30 @@ export const assignments: Assignment[] = [
     course: 'Matematik',
     dueAt: getDateString(2, 23, 59),
     status: 'open',
+    instructions: 'Lös uppgifterna 3.1–3.15 i läroboken. Visa alla uträkningar steg för steg. Svaren ska lämnas in som en PDF-fil. Tänk på att skriva tydligt och motivera dina lösningar.',
+    comments: [
+      {
+        id: 'c1-1',
+        authorType: 'teacher',
+        authorName: 'Anna Lindberg',
+        message: 'Glöm inte att titta på exemplen i kapitel 3.2 innan ni börjar. De ger bra vägledning för de svårare uppgifterna.',
+        createdAt: getDateString(-2, 10, 30),
+      },
+      {
+        id: 'c1-2',
+        authorType: 'student',
+        authorName: 'Du',
+        message: 'Tack! Ska jag även inkludera graferna för uppgift 3.12?',
+        createdAt: getDateString(-2, 14, 15),
+      },
+      {
+        id: 'c1-3',
+        authorType: 'teacher',
+        authorName: 'Anna Lindberg',
+        message: 'Ja, grafer är ett plus! Använd gärna GeoGebra eller rita för hand.',
+        createdAt: getDateString(-1, 8, 45),
+      },
+    ],
   },
   {
     id: 'a2',
@@ -230,6 +254,23 @@ export const assignments: Assignment[] = [
     course: 'Svenska',
     dueAt: getDateString(-1, 23, 59),
     status: 'overdue',
+    instructions: 'Skriv en bokrecension på 800–1000 ord om Vilhelm Mobergs "Utvandrarna". Recensionen ska innehålla en kort sammanfattning, analys av huvudteman och din personliga reflektion. Använd korrekt källhänvisning.',
+    comments: [
+      {
+        id: 'c2-1',
+        authorType: 'teacher',
+        authorName: 'Erik Johansson',
+        message: 'Påminnelse: deadline är imorgon. Hör av er om ni behöver förlängning.',
+        createdAt: getDateString(-2, 9, 0),
+      },
+      {
+        id: 'c2-2',
+        authorType: 'student',
+        authorName: 'Du',
+        message: 'Jag har varit sjuk i veckan. Skulle det vara möjligt att få några extra dagar?',
+        createdAt: getDateString(-1, 16, 30),
+      },
+    ],
   },
   {
     id: 'a3',
@@ -237,6 +278,16 @@ export const assignments: Assignment[] = [
     course: 'Fysik',
     dueAt: getDateString(5, 23, 59),
     status: 'open',
+    instructions: 'Skriv en labbrapport baserad på laborationen vi genomförde i veckan. Rapporten ska följa den vetenskapliga strukturen: syfte, hypotes, material, metod, resultat, diskussion och slutsats. Inkludera mätdata i tabellform och minst en graf.',
+    comments: [
+      {
+        id: 'c3-1',
+        authorType: 'teacher',
+        authorName: 'Johan Karlsson',
+        message: 'Mätdatan från labben finns nu uppladdad i kursmappen. Ni kan använda den som referens.',
+        createdAt: getDateString(-1, 11, 0),
+      },
+    ],
   },
   {
     id: 'a4',
@@ -244,6 +295,23 @@ export const assignments: Assignment[] = [
     course: 'Engelska',
     dueAt: getDateString(-3, 23, 59),
     status: 'completed',
+    instructions: 'Write an essay (500–700 words) analyzing one significant event during World War II. Focus on causes, consequences, and historical significance. Use at least three credible sources and include a bibliography.',
+    comments: [
+      {
+        id: 'c4-1',
+        authorType: 'student',
+        authorName: 'Du',
+        message: 'I submitted my essay about D-Day. Looking forward to your feedback!',
+        createdAt: getDateString(-4, 22, 15),
+      },
+      {
+        id: 'c4-2',
+        authorType: 'teacher',
+        authorName: 'Maria Svensson',
+        message: 'Great work! Well-structured essay with good use of sources. Grade: A. See detailed feedback in the attached document.',
+        createdAt: getDateString(-2, 14, 0),
+      },
+    ],
   },
   {
     id: 'a5',
@@ -251,6 +319,8 @@ export const assignments: Assignment[] = [
     course: 'Historia',
     dueAt: getDateString(7, 23, 59),
     status: 'open',
+    instructions: 'Skapa en illustrerad tidslinje över svenska kungar från Gustav Vasa till nutid. Inkludera minst 10 regenter med viktiga händelser under deras regeringstid. Tidslinjen kan göras digitalt eller för hand.',
+    comments: [],
   },
   {
     id: 'a6',
@@ -258,6 +328,16 @@ export const assignments: Assignment[] = [
     course: 'Engelska',
     dueAt: getDateString(1, 23, 59),
     status: 'open',
+    instructions: 'Förbered dig på glosförhör på kapitel 5 i textboken. Förhöret kommer att innehålla 20 ord som ska översättas från svenska till engelska. Tips: använd Quizlet-länken i kursmaterialet för att öva.',
+    comments: [
+      {
+        id: 'c6-1',
+        authorType: 'teacher',
+        authorName: 'Maria Svensson',
+        message: 'Remember to practice the phrasal verbs especially - they will be on the test!',
+        createdAt: getDateString(0, 9, 15),
+      },
+    ],
   },
 ];
 

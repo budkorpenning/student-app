@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TodayScreen } from '../screens/TodayScreen';
 import { WeekScreen } from '../screens/WeekScreen';
-import { AssignmentsScreen } from '../screens/AssignmentsScreen';
+import { AssignmentsStack } from './AssignmentsStack';
 import { MessagesScreen } from '../screens/MessagesScreen';
 import { MoreStack } from './MoreStack';
 import { useTheme } from '../theme/theme';
@@ -71,7 +71,7 @@ export function RootTabs() {
       />
       <Tab.Screen
         name="Assignments"
-        component={AssignmentsScreen}
+        component={AssignmentsStack}
         options={{
           tabBarLabel: t('tabAssignments'),
           tabBarIcon: ({ focused, color }) => (

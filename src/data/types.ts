@@ -13,12 +13,24 @@ export interface Lesson {
 
 export type AssignmentStatus = 'open' | 'overdue' | 'completed';
 
+export type CommentAuthorType = 'teacher' | 'student';
+
+export interface Comment {
+  id: string;
+  authorType: CommentAuthorType;
+  authorName: string;
+  message: string;
+  createdAt: string; // ISO string
+}
+
 export interface Assignment {
   id: string;
   title: string;
   course?: string;
   dueAt: string; // ISO string
   status: AssignmentStatus;
+  instructions: string;
+  comments: Comment[];
 }
 
 export interface Message {
