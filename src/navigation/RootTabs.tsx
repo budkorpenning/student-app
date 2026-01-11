@@ -4,7 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TodayScreen } from '../screens/TodayScreen';
 import { WeekScreen } from '../screens/WeekScreen';
 import { AssignmentsScreen } from '../screens/AssignmentsScreen';
-import { SettingsScreen } from '../screens/SettingsScreen';
+import { MessagesScreen } from '../screens/MessagesScreen';
+import { MoreStack } from './MoreStack';
 import { useTheme } from '../theme/theme';
 import { useI18n } from '../i18n/i18n';
 
@@ -79,12 +80,22 @@ export function RootTabs() {
         }}
       />
       <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
+        name="Messages"
+        component={MessagesScreen}
         options={{
-          tabBarLabel: t('tabSettings'),
+          tabBarLabel: t('tabMessages'),
           tabBarIcon: ({ focused, color }) => (
-            <TabIcon icon="⚙" focused={focused} color={color} />
+            <TabIcon icon="✉" focused={focused} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="More"
+        component={MoreStack}
+        options={{
+          tabBarLabel: t('tabMore'),
+          tabBarIcon: ({ focused, color }) => (
+            <TabIcon icon="•••" focused={focused} color={color} />
           ),
         }}
       />

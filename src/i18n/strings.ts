@@ -6,7 +6,8 @@ export const strings = {
     tabToday: 'Idag',
     tabWeek: 'Vecka',
     tabAssignments: 'Uppgifter',
-    tabSettings: 'Inställningar',
+    tabMessages: 'Meddelanden',
+    tabMore: 'Mer',
 
     // Today screen
     todayTitle: 'Idag',
@@ -48,6 +49,19 @@ export const strings = {
     lessonChanged: 'Ändrad',
     lessonCancelled: 'Inställd',
 
+    // Messages screen
+    messagesTitle: 'Meddelanden',
+    noMessages: 'Inga meddelanden',
+
+    // More screen
+    moreTitle: 'Mer',
+    moreAsk: 'Fråga',
+    moreSettings: 'Inställningar',
+
+    // Ask screen
+    askTitle: 'Fråga',
+    askHint: 'Här kan du ställa frågor till skolan.',
+
     // Settings screen
     settingsTitle: 'Inställningar',
     language: 'Språk',
@@ -71,7 +85,8 @@ export const strings = {
     tabToday: 'Today',
     tabWeek: 'Week',
     tabAssignments: 'Assignments',
-    tabSettings: 'Settings',
+    tabMessages: 'Messages',
+    tabMore: 'More',
 
     // Today screen
     todayTitle: 'Today',
@@ -112,6 +127,19 @@ export const strings = {
     // Lesson status badges
     lessonChanged: 'Changed',
     lessonCancelled: 'Cancelled',
+
+    // Messages screen
+    messagesTitle: 'Messages',
+    noMessages: 'No messages',
+
+    // More screen
+    moreTitle: 'More',
+    moreAsk: 'Ask',
+    moreSettings: 'Settings',
+
+    // Ask screen
+    askTitle: 'Ask',
+    askHint: 'Here you can ask questions to the school.',
 
     // Settings screen
     settingsTitle: 'Settings',

@@ -20,3 +20,12 @@ export interface Assignment {
   dueAt: string; // ISO string
   status: AssignmentStatus;
 }
+
+export interface Message {
+  id: string;
+  sender: string;
+  subject: string;
+  preview: string;
+  timestamp: string; // ISO string
+  unread: boolean;
+}

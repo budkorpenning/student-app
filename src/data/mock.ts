@@ -1,4 +1,4 @@
-import { Lesson, Assignment } from './types';
+import { Lesson, Assignment, Message } from './types';
 
 // Helper to create dates relative to today
 function getDateString(dayOffset: number, hours: number, minutes: number): string {
@@ -258,5 +258,49 @@ export const assignments: Assignment[] = [
     course: 'Engelska',
     dueAt: getDateString(1, 23, 59),
     status: 'open',
+  },
+];
+
+// Mock messages
+export const messages: Message[] = [
+  {
+    id: 'm1',
+    sender: 'Anna Lindberg',
+    subject: 'Matematikprov nästa vecka',
+    preview: 'Hej! Jag vill påminna om att vi har prov på kapitel 3 nästa tisdag. Glöm inte att repetera...',
+    timestamp: getDateString(0, 9, 30),
+    unread: true,
+  },
+  {
+    id: 'm2',
+    sender: 'Expeditionen',
+    subject: 'Schema ändrat fredag',
+    preview: 'På grund av studiedag för personal är schemat ändrat på fredag. Se bifogat dokument för...',
+    timestamp: getDateString(-1, 14, 15),
+    unread: true,
+  },
+  {
+    id: 'm3',
+    sender: 'Erik Johansson',
+    subject: 'Bokrecension - förlängd deadline',
+    preview: 'Jag har beslutat att förlänga deadline för bokrecensionen till nästa måndag. Om ni har frågor...',
+    timestamp: getDateString(-2, 11, 0),
+    unread: false,
+  },
+  {
+    id: 'm4',
+    sender: 'Maria Svensson',
+    subject: 'Påminnelse: Essay deadline',
+    preview: 'Hi everyone! Just a friendly reminder that your essays are due this Friday. Please submit via...',
+    timestamp: getDateString(-3, 16, 45),
+    unread: false,
+  },
+  {
+    id: 'm5',
+    sender: 'Skolsköterskan',
+    subject: 'Hälsosamtal',
+    preview: 'Det är dags för årligt hälsosamtal. Vänligen boka en tid via länken nedan eller kontakta...',
+    timestamp: getDateString(-5, 10, 0),
+    unread: false,
   },
 ];
