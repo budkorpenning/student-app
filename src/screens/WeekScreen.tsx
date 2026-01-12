@@ -9,8 +9,8 @@ import { EmptyState } from '../components/EmptyState';
 import { useTheme } from '../theme/theme';
 import { useI18n } from '../i18n/i18n';
 import { weekLessons } from '../data/mock';
-import { Lesson } from '../data/types';
-import { formatTimeRange, getDayOfWeek } from '../utils/date';
+import { Lesson, AbsenceStatus } from '../data/types';
+import { formatTimeRange, getDayOfWeek, isLessonPast } from '../utils/date';
 import { StringKey } from '../i18n/strings';
 
 const DAY_KEYS: StringKey[] = ['mon', 'tue', 'wed', 'thu', 'fri'];
@@ -28,58 +28,71 @@ export function WeekScreen() {
     return weekLessons[selectedDay] || [];
   }, [selectedDay]);
 
-  const getLessonStatusBadge = useCallback((lesson: Lesson) => {
-    if (lesson.status === 'changed') {
-      return <Badge label={t('lessonChanged')} variant="warning" />;
-    }
-    if (lesson.status === 'cancelled') {
-      return <Badge label={t('lessonCancelled')} variant="danger" />;
-    }
-    return null;
-  }, [t]);
+  const getAbsenceStatusBadge = useCallback(
+    (lesson: Lesson) => {
+      // Only show absence status for past lessons
+      if (!isLessonPast(lesson.end) || !lesson.absenceStatus) {
+        return null;
+      }
 
-  const renderLesson = useCallback(({ item }: { item: Lesson }) => (
-    <View style={{ marginBottom: spacing.sm }}>
-      <ListRow
-        title={item.title}
-        subtitle={`${formatTimeRange(item.start, item.end)}${item.location ? ` · ${item.location}` : ''}`}
-        trailing={getLessonStatusBadge(item)}
-      />
-    </View>
-  ), [spacing.sm, getLessonStatusBadge]);
+      const statusConfig: Record<AbsenceStatus, { labelKey: StringKey; variant: 'success' | 'warning' | 'danger' }> = {
+        present: { labelKey: 'absencePresent', variant: 'success' },
+        valid: { labelKey: 'absenceValid', variant: 'warning' },
+        invalid: { labelKey: 'absenceInvalid', variant: 'danger' },
+      };
 
-  const ListHeader = useMemo(() => (
-    <View style={{ paddingTop: spacing.lg }}>
-      <Text style={[typography.title, { color: colors.text, marginBottom: spacing.xl }]}>
-        {t('weekTitle')}
-      </Text>
+      const config = statusConfig[lesson.absenceStatus];
+      return <Badge label={t(config.labelKey)} variant={config.variant} />;
+    },
+    [t]
+  );
 
-      {/* Day picker */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={{ marginBottom: spacing.lg }}
-        contentContainerStyle={styles.chipContainer}
-      >
-        {DAY_KEYS.map((key, index) => {
-          const dayNumber = index + 1;
-          return (
-            <View key={key} style={{ marginRight: spacing.sm }}>
-              <Chip
-                label={t(key)}
-                selected={selectedDay === dayNumber}
-                onPress={() => setSelectedDay(dayNumber)}
-              />
-            </View>
-          );
-        })}
-      </ScrollView>
-    </View>
-  ), [colors, spacing, typography, t, selectedDay]);
+  const renderLesson = useCallback(
+    ({ item }: { item: Lesson }) => (
+      <View style={{ marginBottom: spacing.sm }}>
+        <ListRow
+          title={item.title}
+          subtitle={`${formatTimeRange(item.start, item.end)}${item.location ? ` · ${item.location}` : ''}`}
+          trailing={getAbsenceStatusBadge(item)}
+        />
+      </View>
+    ),
+    [spacing.sm, getAbsenceStatusBadge]
+  );
 
-  const ListEmpty = useMemo(() => (
-    <EmptyState message={t('noLessonsThisDay')} />
-  ), [t]);
+  const ListHeader = useMemo(
+    () => (
+      <View style={{ paddingTop: spacing.lg }}>
+        <Text style={[typography.title, { color: colors.text, marginBottom: spacing.xl }]}>
+          {t('weekTitle')}
+        </Text>
+
+        {/* Day picker */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={{ marginBottom: spacing.lg }}
+          contentContainerStyle={styles.chipContainer}
+        >
+          {DAY_KEYS.map((key, index) => {
+            const dayNumber = index + 1;
+            return (
+              <View key={key} style={{ marginRight: spacing.sm }}>
+                <Chip
+                  label={t(key)}
+                  selected={selectedDay === dayNumber}
+                  onPress={() => setSelectedDay(dayNumber)}
+                />
+              </View>
+            );
+          })}
+        </ScrollView>
+      </View>
+    ),
+    [colors, spacing, typography, t, selectedDay]
+  );
+
+  const ListEmpty = useMemo(() => <EmptyState message={t('noLessonsThisDay')} />, [t]);
 
   return (
     <Screen>

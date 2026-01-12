@@ -1,4 +1,4 @@
-export type LessonStatus = 'normal' | 'changed' | 'cancelled';
+export type AbsenceStatus = 'present' | 'valid' | 'invalid';
 
 export interface Lesson {
   id: string;
@@ -8,7 +8,7 @@ export interface Lesson {
   course?: string;
   location?: string;
   teacher?: string;
-  status?: LessonStatus;
+  absenceStatus?: AbsenceStatus;
 }
 
 export type AssignmentStatus = 'open' | 'overdue' | 'completed';

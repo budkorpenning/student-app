@@ -1,6 +1,18 @@
 import { Lesson, Assignment, Message, Comment } from './types';
 
-// Helper to create dates relative to today
+// Mock "now" is always Wednesday at 10:00
+// This is used to determine what's "past" for absence status display
+export const MOCK_NOW = new Date('2026-01-14T10:00:00'); // A Wednesday
+
+// Helper to create dates relative to mock Wednesday
+function getDateStringFromMockNow(dayOffset: number, hours: number, minutes: number): string {
+  const date = new Date(MOCK_NOW);
+  date.setDate(date.getDate() + dayOffset);
+  date.setHours(hours, minutes, 0, 0);
+  return date.toISOString();
+}
+
+// Legacy helper for assignments/messages (still relative to actual today)
 function getDateString(dayOffset: number, hours: number, minutes: number): string {
   const date = new Date();
   date.setDate(date.getDate() + dayOffset);
@@ -8,146 +20,145 @@ function getDateString(dayOffset: number, hours: number, minutes: number): strin
   return date.toISOString();
 }
 
-// Mock lessons for today
+// Mock lessons for today (Wednesday in mock time)
 export const todayLessons: Lesson[] = [
   {
     id: '1',
-    start: getDateString(0, 8, 15),
-    end: getDateString(0, 9, 0),
+    start: getDateStringFromMockNow(0, 8, 15),
+    end: getDateStringFromMockNow(0, 9, 0),
     title: 'Matematik',
     course: 'MA1c',
     location: 'Sal 214',
     teacher: 'Anna Lindberg',
-    status: 'normal',
   },
   {
     id: '2',
-    start: getDateString(0, 9, 15),
-    end: getDateString(0, 10, 0),
+    start: getDateStringFromMockNow(0, 9, 15),
+    end: getDateStringFromMockNow(0, 10, 0),
     title: 'Svenska',
     course: 'SV1',
     location: 'Sal 108',
     teacher: 'Erik Johansson',
-    status: 'normal',
   },
   {
     id: '3',
-    start: getDateString(0, 10, 15),
-    end: getDateString(0, 11, 0),
+    start: getDateStringFromMockNow(0, 10, 15),
+    end: getDateStringFromMockNow(0, 11, 0),
     title: 'Engelska',
     course: 'EN5',
     location: 'Sal 305',
     teacher: 'Maria Svensson',
-    status: 'changed',
   },
   {
     id: '4',
-    start: getDateString(0, 13, 0),
-    end: getDateString(0, 14, 30),
+    start: getDateStringFromMockNow(0, 13, 0),
+    end: getDateStringFromMockNow(0, 14, 30),
     title: 'Fysik',
     course: 'FY1',
     location: 'Labbsal 1',
     teacher: 'Johan Karlsson',
-    status: 'normal',
   },
   {
     id: '5',
-    start: getDateString(0, 14, 45),
-    end: getDateString(0, 15, 30),
+    start: getDateStringFromMockNow(0, 14, 45),
+    end: getDateStringFromMockNow(0, 15, 30),
     title: 'Historia',
     course: 'HI1b',
     location: 'Sal 212',
     teacher: 'Lisa Andersson',
-    status: 'cancelled',
   },
   {
     id: '6',
-    start: getDateString(0, 15, 45),
-    end: getDateString(0, 16, 30),
+    start: getDateStringFromMockNow(0, 15, 45),
+    end: getDateStringFromMockNow(0, 16, 30),
     title: 'Biologi',
     course: 'BI1',
     location: 'Labbsal 2',
     teacher: 'Karin Holm',
-    status: 'normal',
   },
   {
     id: '7',
-    start: getDateString(0, 16, 45),
-    end: getDateString(0, 17, 30),
+    start: getDateStringFromMockNow(0, 16, 45),
+    end: getDateStringFromMockNow(0, 17, 30),
     title: 'Samhällskunskap',
     course: 'SH1b',
     location: 'Sal 310',
     teacher: 'Anders Berg',
-    status: 'normal',
   },
 ];
 
 // Mock lessons for the week (Mon-Fri)
+// Monday = -2 days from Wed, Tuesday = -1 day, Wednesday = 0, etc.
 export const weekLessons: Record<number, Lesson[]> = {
-  1: [ // Monday
+  1: [ // Monday (past - all have absenceStatus)
     {
       id: 'w1-1',
-      start: getDateString(0, 8, 15),
-      end: getDateString(0, 9, 0),
+      start: getDateStringFromMockNow(-2, 8, 15),
+      end: getDateStringFromMockNow(-2, 9, 0),
       title: 'Matematik',
       course: 'MA1c',
       location: 'Sal 214',
       teacher: 'Anna Lindberg',
+      absenceStatus: 'present',
     },
     {
       id: 'w1-2',
-      start: getDateString(0, 9, 15),
-      end: getDateString(0, 10, 0),
+      start: getDateStringFromMockNow(-2, 9, 15),
+      end: getDateStringFromMockNow(-2, 10, 0),
       title: 'Svenska',
       course: 'SV1',
       location: 'Sal 108',
       teacher: 'Erik Johansson',
+      absenceStatus: 'present',
     },
     {
       id: 'w1-3',
-      start: getDateString(0, 10, 15),
-      end: getDateString(0, 11, 0),
-      title: 'Engelska',
-      course: 'EN5',
-      location: 'Sal 305',
-      teacher: 'Maria Svensson',
-      status: 'changed',
-    },
-  ],
-  2: [ // Tuesday
-    {
-      id: 'w2-1',
-      start: getDateString(1, 8, 15),
-      end: getDateString(1, 9, 45),
+      start: getDateStringFromMockNow(-2, 10, 15),
+      end: getDateStringFromMockNow(-2, 11, 0),
       title: 'Biologi',
       course: 'BI1',
       location: 'Labbsal 2',
       teacher: 'Karin Holm',
+      absenceStatus: 'invalid',
     },
+  ],
+  2: [ // Tuesday (past - all have absenceStatus)
     {
-      id: 'w2-2',
-      start: getDateString(1, 10, 0),
-      end: getDateString(1, 11, 30),
-      title: 'Fysik',
-      course: 'FY1',
-      location: 'Labbsal 1',
-      teacher: 'Johan Karlsson',
-    },
-    {
-      id: 'w2-3',
-      start: getDateString(1, 13, 0),
-      end: getDateString(1, 14, 30),
+      id: 'w2-1',
+      start: getDateStringFromMockNow(-1, 8, 15),
+      end: getDateStringFromMockNow(-1, 9, 45),
       title: 'Matematik',
       course: 'MA1c',
       location: 'Sal 214',
       teacher: 'Anna Lindberg',
+      absenceStatus: 'present',
+    },
+    {
+      id: 'w2-2',
+      start: getDateStringFromMockNow(-1, 10, 0),
+      end: getDateStringFromMockNow(-1, 11, 30),
+      title: 'Svenska',
+      course: 'SV1',
+      location: 'Sal 108',
+      teacher: 'Erik Johansson',
+      absenceStatus: 'present',
+    },
+    {
+      id: 'w2-3',
+      start: getDateStringFromMockNow(-1, 13, 0),
+      end: getDateStringFromMockNow(-1, 14, 30),
+      title: 'Engelska',
+      course: 'EN5',
+      location: 'Sal 305',
+      teacher: 'Maria Svensson',
+      absenceStatus: 'valid',
     },
   ],
-  3: [ // Wednesday
+  3: [ // Wednesday (today - no absenceStatus shown)
     {
       id: 'w3-1',
-      start: getDateString(2, 9, 0),
-      end: getDateString(2, 10, 30),
+      start: getDateStringFromMockNow(0, 9, 0),
+      end: getDateStringFromMockNow(0, 10, 30),
       title: 'Historia',
       course: 'HI1b',
       location: 'Sal 212',
@@ -155,19 +166,19 @@ export const weekLessons: Record<number, Lesson[]> = {
     },
     {
       id: 'w3-2',
-      start: getDateString(2, 10, 45),
-      end: getDateString(2, 12, 15),
+      start: getDateStringFromMockNow(0, 10, 45),
+      end: getDateStringFromMockNow(0, 12, 15),
       title: 'Svenska',
       course: 'SV1',
       location: 'Sal 108',
       teacher: 'Erik Johansson',
     },
   ],
-  4: [ // Thursday
+  4: [ // Thursday (future - no absenceStatus shown)
     {
       id: 'w4-1',
-      start: getDateString(3, 8, 15),
-      end: getDateString(3, 9, 45),
+      start: getDateStringFromMockNow(1, 8, 15),
+      end: getDateStringFromMockNow(1, 9, 45),
       title: 'Engelska',
       course: 'EN5',
       location: 'Sal 305',
@@ -175,29 +186,28 @@ export const weekLessons: Record<number, Lesson[]> = {
     },
     {
       id: 'w4-2',
-      start: getDateString(3, 10, 0),
-      end: getDateString(3, 11, 30),
+      start: getDateStringFromMockNow(1, 10, 0),
+      end: getDateStringFromMockNow(1, 11, 30),
       title: 'Kemi',
       course: 'KE1',
       location: 'Labbsal 3',
       teacher: 'Peter Nilsson',
-      status: 'cancelled',
     },
     {
       id: 'w4-3',
-      start: getDateString(3, 13, 0),
-      end: getDateString(3, 14, 30),
+      start: getDateStringFromMockNow(1, 13, 0),
+      end: getDateStringFromMockNow(1, 14, 30),
       title: 'Idrott',
       course: 'IDH1',
       location: 'Idrottshallen',
       teacher: 'Sara Ekström',
     },
   ],
-  5: [ // Friday
+  5: [ // Friday (future - no absenceStatus shown)
     {
       id: 'w5-1',
-      start: getDateString(4, 8, 15),
-      end: getDateString(4, 9, 45),
+      start: getDateStringFromMockNow(2, 8, 15),
+      end: getDateStringFromMockNow(2, 9, 45),
       title: 'Matematik',
       course: 'MA1c',
       location: 'Sal 214',
@@ -205,8 +215,8 @@ export const weekLessons: Record<number, Lesson[]> = {
     },
     {
       id: 'w5-2',
-      start: getDateString(4, 10, 0),
-      end: getDateString(4, 11, 30),
+      start: getDateStringFromMockNow(2, 10, 0),
+      end: getDateStringFromMockNow(2, 11, 30),
       title: 'Samhällskunskap',
       course: 'SH1b',
       location: 'Sal 310',

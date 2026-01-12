@@ -55,9 +55,10 @@ export const strings = {
     you: 'Du',
     teacher: 'Lärare',
 
-    // Lesson status badges
-    lessonChanged: 'Ändrad',
-    lessonCancelled: 'Inställd',
+    // Absence status badges
+    absencePresent: 'Närvarande',
+    absenceValid: 'Giltig',
+    absenceInvalid: 'Ogiltig',
 
     // Messages screen
     messagesTitle: 'Meddelanden',
@@ -144,9 +145,10 @@ export const strings = {
     you: 'You',
     teacher: 'Teacher',
 
-    // Lesson status badges
-    lessonChanged: 'Changed',
-    lessonCancelled: 'Cancelled',
+    // Absence status badges
+    absencePresent: 'Present',
+    absenceValid: 'Valid',
+    absenceInvalid: 'Invalid',
 
     // Messages screen
     messagesTitle: 'Messages',

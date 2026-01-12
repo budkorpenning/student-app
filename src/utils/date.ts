@@ -96,3 +96,12 @@ export function formatCommentTime(isoString: string, language: 'sv' | 'en'): str
     return `${formatShortDate(isoString)} ${time}`;
   }
 }
+
+// Check if a lesson is in the past relative to MOCK_NOW
+// Used to determine if absence status should be shown
+import { MOCK_NOW } from '../data/mock';
+
+export function isLessonPast(lessonEndIso: string): boolean {
+  const lessonEnd = new Date(lessonEndIso);
+  return lessonEnd < MOCK_NOW;
+}

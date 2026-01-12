@@ -22,7 +22,7 @@ export function TodayScreen() {
 
   const { nextLesson, laterLessons } = useMemo(() => {
     const upcoming = todayLessons
-      .filter((lesson) => new Date(lesson.end) > now && lesson.status !== 'cancelled')
+      .filter((lesson) => new Date(lesson.end) > now)
       .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
 
     return {
@@ -38,16 +38,6 @@ export function TodayScreen() {
       .slice(0, 3);
   }, []);
 
-  const getLessonStatusBadge = useCallback((lesson: Lesson) => {
-    if (lesson.status === 'changed') {
-      return <Badge label={t('lessonChanged')} variant="warning" />;
-    }
-    if (lesson.status === 'cancelled') {
-      return <Badge label={t('lessonCancelled')} variant="danger" />;
-    }
-    return null;
-  }, [t]);
-
   const getAssignmentBadge = useCallback((assignment: Assignment) => {
     if (assignment.status === 'overdue') {
       return <Badge label={t('statusOverdue')} variant="danger" />;
@@ -60,10 +50,9 @@ export function TodayScreen() {
       <ListRow
         title={item.title}
         subtitle={`${formatTimeRange(item.start, item.end)}${item.location ? ` · ${item.location}` : ''}`}
-        trailing={getLessonStatusBadge(item)}
       />
     </View>
-  ), [spacing.sm, getLessonStatusBadge]);
+  ), [spacing.sm]);
 
   const ListHeader = useMemo(() => (
     <View style={{ paddingTop: spacing.lg }}>
@@ -77,9 +66,6 @@ export function TodayScreen() {
       {nextLesson ? (
         <Card variant="hero" style={{ marginBottom: spacing.xl }}>
           <View style={styles.heroContent}>
-            {nextLesson.status === 'changed' && (
-              <Badge label={t('lessonChanged')} variant="warning" />
-            )}
             <Text style={[typography.title, { color: colors.textOnPrimary, marginTop: 4 }]}>
               {nextLesson.title}
             </Text>
