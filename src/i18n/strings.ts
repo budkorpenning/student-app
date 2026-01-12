@@ -73,6 +73,12 @@ export const strings = {
     askTitle: 'Fråga',
     askHint: 'Här kan du ställa frågor till skolan.',
 
+    // Ask AI modal
+    askSubtitleDemo: 'Ställ en fråga (demo)',
+    askPlaceholder: 'Skriv din fråga...',
+    close: 'Stäng',
+    mockAiAnswer: 'Du har två uppgifter som ska lämnas in idag.',
+
     // Settings screen
     settingsTitle: 'Inställningar',
     language: 'Språk',
@@ -162,6 +168,12 @@ export const strings = {
     // Ask screen
     askTitle: 'Ask',
     askHint: 'Here you can ask questions to the school.',
+
+    // Ask AI modal
+    askSubtitleDemo: 'Ask a question (demo)',
+    askPlaceholder: 'Type your question...',
+    close: 'Close',
+    mockAiAnswer: 'You have two assignments that are due today.',
 
     // Settings screen
     settingsTitle: 'Settings',
